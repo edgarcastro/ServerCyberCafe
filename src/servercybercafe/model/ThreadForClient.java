@@ -20,9 +20,11 @@ public class ThreadForClient extends Thread{
     private Socket sk;
     private String nameClient;
     private Integer idClient;
+    private Boolean locked;
 
     public ThreadForClient(Socket sk) {
         this.sk = sk;
+        locked = false;
     }
     
     public void sendName() { 
@@ -52,25 +54,6 @@ public class ThreadForClient extends Thread{
         tout.start();
     }
     
-    
-    public void capturaNombre() {
-        DataInputStream flujoEntrada = null;
-        try {
-            // OBTENEMOS EL FLUJO DE ENTRADA DEL CLIENTE Y CREAMOS CON ESTE UN FLUJO DE ENTRADA DE DATOS
-            flujoEntrada = new DataInputStream(sk.getInputStream());
-            // leemos mediante un while hasta que llegue la cedula del cliente
-            while (nameClient == null) {
-                // CAPTURAMOS LA CEDULA
-                nameClient = flujoEntrada.readUTF();
-                // cuando esta llegue, le enviamos al cliente su numero aleatorio    
-                //notificarNumeroDeLoteria(boleto);
-            }
-        } catch (IOException ex) {
-            // AQUI COLOCAMOS UN MENSAJE DE ERROR EN LA VENTANA.
-            //ventana.mostrarMensajes("ERROR: Problemas de Entrada y Salida en el cliente IP: " + conexionCliente.getInetAddress().getHostAddress());
-        } 
-    }
-    
     public void blockClient(){
         String req = "BLOCK";
         Thread tout = new Thread(){
@@ -85,6 +68,7 @@ public class ThreadForClient extends Thread{
                     flujoSalida.writeUTF(req);
                     // obligamos a que ese dato salga del cache de la tarjeta de red del servidor
                     flujoSalida.flush();
+                    setLocked(true);
                     System.out.println("Mande a bloquear a "+nameClient);
                 } catch (IOException error) {
                     // colocamos un mensaje de error en caso de que ocurra
@@ -114,6 +98,7 @@ public class ThreadForClient extends Thread{
                     flujoSalida.writeUTF(req);
                     // obligamos a que ese dato salga del cache de la tarjeta de red del servidor
                     flujoSalida.flush();
+                    setLocked(false);
                     System.out.println("Mande a desbloquear a "+nameClient);
                 } catch (IOException error) {
                     // colocamos un mensaje de error en caso de que ocurra
@@ -142,6 +127,14 @@ public class ThreadForClient extends Thread{
 
     public void setNameClient(String nameClient) {
         this.nameClient = nameClient;
+    }
+
+    public Boolean getLocked() {
+        return locked;
+    }
+
+    public void setLocked(Boolean locked) {
+        this.locked = locked;
     }
 
     public Integer getIdClient() {
