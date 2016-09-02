@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import servercybercafe.controllers.masterController;
 
 /**
@@ -35,8 +36,10 @@ public class Server extends Thread{
             conexionServidor = new ServerSocket(port);
             state = true;
             // MOSTRAMOS UN MESAJE DE OK
+            JOptionPane.showMessageDialog(null, "Servidor Conectado en el puerto :"+port);
             System.out.println("Servidor Conectado en el puerto: "+port);
         } catch (IOException error) {
+            JOptionPane.showMessageDialog(null, "No se pudo iniciar el servidor");
             System.out.println("ERROR: No se puedo iniciar el servidor\nMensaje Original: "+error.getMessage());
         }
     }
@@ -49,10 +52,12 @@ public class Server extends Thread{
                 clients.add(tfc);
                 tfc.setNameClient("PC 0"+clients.indexOf(tfc));
                 tfc.setIdClient(clients.indexOf(tfc));
+                JOptionPane.showMessageDialog(null, "Hay un nuevo Cliente llamado: "+tfc.getNameClient());
                 System.out.println("Hay un nuevo Cliente llamado: "+tfc.getNameClient());
                 masterController.updateClients(clients);
                 tfc.start();
             }catch(IOException ex){
+                JOptionPane.showMessageDialog(null, "Error de entrada Input o Salida Output");
                 System.out.println("\"Error de entrada Input o Salida Output \"");
             }
         }

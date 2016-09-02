@@ -25,7 +25,7 @@ public class masterController {
     }
     
     public static void initServer(int port){
-        sv = new Server(3030);
+        sv = new Server(port);
         sv.start();
     }
     
