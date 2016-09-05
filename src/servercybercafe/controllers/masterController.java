@@ -41,4 +41,16 @@ public class masterController {
     public static void unBlockClient(int idPC){
         sv.unBlockOneClient(idPC);
     }
+    
+    public static void apagarCliente(int idPC){
+        sv.apagarOneCliente(idPC);
+    }
+    
+    public static void reiniciarCliente(int idPC){
+        sv.reiniciarOneCliente(idPC);
+    }
+    
+    public static void cancelarOperacion(int idPC){
+        sv.cancelarOperacion(idPC);
+    }
 }

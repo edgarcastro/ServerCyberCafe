@@ -71,10 +71,22 @@ public class Server extends Thread{
     }
     
     public void blockOneClient(int idPc){
-        clients.get(idPc).blockClient();
+        clients.get(idPc).sendActions("BLOCK");
     }
     
     public void unBlockOneClient(int idPc){
-        clients.get(idPc).unBlockClient();
+        clients.get(idPc).sendActions("UNBLOCK");
+    }
+    
+    public void apagarOneCliente(int idPc){
+        clients.get(idPc).sendActions("APAGAR");
+    }
+    
+    public void reiniciarOneCliente(int idPc){
+        clients.get(idPc).sendActions("REINICIAR");
+    }
+    
+    public void cancelarOperacion(int idPc){
+        clients.get(idPc).sendActions("CANCELAR");
     }
 }

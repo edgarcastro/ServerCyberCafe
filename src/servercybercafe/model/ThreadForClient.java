@@ -26,7 +26,9 @@ public class ThreadForClient extends Thread{
         this.sk = sk;
         locked = false;
     }
-    
+    /**
+     * Asinga un un nombre al cliente y se lo envia
+     */
     public void sendName() { 
         Thread tout = new Thread(){
             @Override
@@ -52,6 +54,41 @@ public class ThreadForClient extends Thread{
             
         };
         tout.start();
+    }
+    
+    /**
+     * este metodo recibe Strig con la accion que sera enviada a un cliente 
+     * para que este la realice
+     * @param mensaje 
+     */
+    public void sendActions(String mensaje){
+        Thread tout = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    super.run();
+                    DataOutputStream flujoSalida = null;
+                    // creamos un flujo de salida para enviar datos el cliente
+                    flujoSalida = new DataOutputStream(sk.getOutputStream());
+                    // enviamos un dato de tipo Chars, en este caso la orden de apagar
+                    flujoSalida.writeUTF(mensaje);
+                    // obligamos a que ese dato salga del cache de la tarjeta de red del servidor
+                    flujoSalida.flush();
+                    setLocked(true);
+                    System.out.println("Mande a bloquear a "+nameClient);
+                } catch (IOException error) {
+                    // colocamos un mensaje de error en caso de que ocurra
+                    System.out.println(""+error);
+                    //getVentana().mostrarMensajes("Error al Enviar datos al cliente\nMensaje Original: " + error.getMessage());
+                    //Servidor.getListaClientesConectados().remove(HiloAtiendeCliente.this);
+                    //ventana.actualizarClientesConectados();
+                }
+                
+            }
+            
+        };
+        tout.start();
+        
     }
     
     public void blockClient(){
